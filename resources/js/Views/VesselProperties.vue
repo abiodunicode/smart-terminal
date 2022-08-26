@@ -1,0 +1,203 @@
+<template>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header p-2">
+              <ul class="nav nav-pills">
+                <li class="nav-item">
+                  <router-link to="" class="nav-link show"
+                    ><h4>Create Vessel</h4></router-link
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="tab-content">
+                <!-- Activity Tab -->
+                <div class="tab-pane active show" id="activity"></div>
+                <!-- Setting Tab -->
+
+                <h5><strong>Create a new Vessel & Voyage</strong></h5>
+                <hr />
+                <p>
+                  Creation of Vessel Name using the official vessel name with correct
+                  spelling as shown in Lloyd list or in the IMO chart. eg: SILVER RAY 091W
+                </p>
+
+                <input type="checkbox" id="checkbox" v-model="checked" />
+                <label for="checkbox">{{ checked }}</label>
+
+                <form @submit.prevent class="form-horizontal">
+                  <div class="card-body">
+                    <div class="form-group row">
+                      <label for="inputEmail3" class="col-sm-2 col-form-label"
+                        >Vessel Name :</label
+                      >
+
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          v-if="checked"
+                          v-model="form.vessel_name"
+                          type="text"
+                          name="vessel_name"
+                          :class="{ 'is-invalid': form.errors.has('vessel_name') }"
+                          class="form-control"
+                        />
+
+                        <v-select
+                          v-if="!checked"
+                          v-model="form.vessel_name"
+                          as="vessel_name"
+                          :from="options"
+                          class="form-control"
+                          tagging
+                          :class="{ 'is-invalid': form.errors.has('vessel_name') }"
+                        ></v-select>
+
+                        <has-error :form="form" field="vessel_name"></has-error>
+                        <input type="checkbox" id="checkbox" v-model="checked" />
+                        <label for="checkbox">{{
+                          checked == false ? "Select Ships" : "Other"
+                        }}</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-body" style="margin-top: -20px">
+                    <div class="form-group row">
+                      <label for="inputEmail3" class="col-sm-2 col-form-label"
+                        >Voyage Number :</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          v-model="form.voyage_number"
+                          type="text"
+                          name="voyage_number"
+                          :class="{ 'is-invalid': form.errors.has('voyage_number') }"
+                          class="form-control"
+                        />
+                        <has-error :form="form" field="voyage_number"></has-error>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+
+                  <div class="form-group">
+                    <div class="col-md-6 mx-auto">
+                      <!-- <button type="submit" class="btn btn-success">Save</button> -->
+                      <button type="submit" @click="createNew" class="btn btn-primary">
+                        Create
+                      </button>
+                      <button type="reset" class="btn btn-primary" @click="reset">
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <!-- Setting Tab -->
+
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- end tabs -->
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+export default {
+  mounted() {
+    console.log("Component mounted.");
+  },
+
+  data() {
+    return {
+      checked: false,
+      vesselnames: [],
+
+      form: new Form({
+        // tracking: "",
+
+        vessel_name: "",
+        voyage_number: "",
+      }),
+    };
+  },
+
+  methods: {
+    loadVessels() {
+      this.$Progress.start();
+
+      // if(this.$gate.isAdmin()){
+      axios.get("api/vesselnames").then(({ data }) => (this.vesselnames = data.data));
+      // console.log(this.vesselnames);
+      // }
+
+      this.$Progress.finish();
+    },
+
+    reset() {
+      this.form.vessel_name = "";
+      this.form.voyage_number = "";
+    },
+
+    createNew() {
+      this.form
+        .post("api/createvessel")
+        .then((response) => {
+          // $('#addNew').modal('hide');
+
+          Toast.fire({
+            icon: "success",
+            title: response.data.message,
+          });
+
+          this.$Progress.finish();
+          this.form.vessel_name = "";
+          this.form.voyage_number = "";
+
+          // this.loadUsers();
+        })
+        .catch(() => {
+          Toast.fire({
+            icon: "error",
+            title: "Empty fields - Some error occured! Please try again",
+          });
+        });
+    },
+  },
+  created() {
+    this.$Progress.start();
+    this.loadVessels();
+    this.$Progress.finish();
+  },
+
+  computed: {
+    options() {
+      return Object.keys(this.vesselnames).map((k) => {
+        let o = this.vesselnames[k];
+
+        return `${o.vessel_name}`;
+      });
+    },
+
+    options_id() {
+      return Object.keys(this.vesselnames).map((k) => {
+        let i = Number(this.vesselnames[k]);
+        return ` ${i.id}`;
+      });
+    },
+  },
+};
+</script>

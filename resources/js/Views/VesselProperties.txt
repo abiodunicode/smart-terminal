@@ -1,0 +1,167 @@
+<template>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header p-2">
+              <ul class="nav nav-pills">
+                <li class="nav-item">
+                  <router-link to="" class="nav-link show"
+                    ><h4>Vessel Properties</h4></router-link
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="tab-content">
+                <!-- Activity Tab -->
+                <div class="tab-pane active show" id="activity"></div>
+                <!-- Setting Tab -->
+
+                <h5><strong>Update Vessel Properties</strong></h5>
+                <hr />
+                <p>
+                  Here you can add the vessel characteristics eg: LOA, Flag / Nationality,
+                  EDI voyages, call sign etc
+                </p>
+
+                <form @click.prevent="" class="form-horizontal">
+                  <div class="card-body">
+                    <div class="form-group row">
+                      <label for="inputEmail3" class="col-sm-2 col-form-label"
+                        >Select Vessel & Voy*:</label
+                      >
+
+                      <div class="col-sm-4">
+                        <v-select
+                          v-model="form.vessel_name"
+                          as="vessel_name"
+                          :from="options"
+                          class="form-control"
+                          tagging
+                        ></v-select>
+                      </div>
+                      <has-error :form="form" field="vessel_name"></has-error>
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <div class="form-group">
+                    <div class="col-md-6 mx-auto">
+                      <!-- <button type="submit" class="btn btn-success">Save</button> -->
+                      <button
+                        type="submit"
+                        @click="createNew"
+                        :disabled="form.voyage_number === '' || form.vessel_name === ''"
+                        class="btn btn-primary"
+                      >
+                        Create
+                      </button>
+                      <button type="reset" class="btn btn-primary">Reset</button>
+                    </div>
+                  </div>
+                </form>
+                <!-- Setting Tab -->
+
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- end tabs -->
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+export default {
+  mounted() {
+    console.log("Component mounted.");
+  },
+
+  data() {
+    return {
+      checked: true,
+      vesselnames: [],
+
+      form: new Form({
+        // tracking: "",
+
+        vessel_name: "",
+        voyage_number: "",
+      }),
+    };
+  },
+
+  methods: {
+    // GeneratetrackingNumber() {
+    //   // const num = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
+    //   // // return (this.form.gi_carrier_ref_no = "BHL" + num + "-CARGO");
+    //   const a = Math.round(Date.now() / 1000); // 1405792937;
+    //   return (this.form.gi_carrier_ref_no = a);
+    // },
+
+    loadUsers() {
+      this.$Progress.start();
+
+      // if(this.$gate.isAdmin()){
+      axios.get("api/vesselnames").then(({ data }) => (this.vesselnames = data.data));
+      // console.log(this.vesselnames);
+      // }
+
+      this.$Progress.finish();
+    },
+
+    createNew() {
+      this.form
+        .post("api/createvessel")
+        .then((response) => {
+          // $('#addNew').modal('hide');
+
+          Toast.fire({
+            icon: "success",
+            title: response.data.message,
+          });
+
+          this.$Progress.finish();
+          // this.loadUsers();
+        })
+        .catch(() => {
+          Toast.fire({
+            icon: "error",
+            title: "Some error occured! Please try again",
+          });
+        });
+    },
+  },
+  created() {
+    this.$Progress.start();
+    this.loadUsers();
+    this.$Progress.finish();
+  },
+
+  computed: {
+    options() {
+      return Object.keys(this.vesselnames).map((k) => {
+        let o = this.vesselnames[k];
+
+        return `${o.vessel_name} ${o.id}`;
+      });
+    },
+
+    options_id() {
+      return Object.keys(this.vesselnames).map((k) => {
+        let i = Number(this.vesselnames[k]);
+        return ` ${i.id}`;
+      });
+    },
+  },
+};
+</script>

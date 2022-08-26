@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Requests\AddVessel;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class AddVesselRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        if ($this->isMethod('post')) {
+            return $this->createRules();
+        } elseif ($this->isMethod('put')) {
+            return $this->updateRules();
+        }
+    }
+    /**
+     * Define validation rules to store method for resource creation
+     *
+     * @return array
+     */
+    public function createRules(): array
+    {
+        return [
+            'vessel_name' => 'required|string|max:191',
+            'voyage_number' => 'required|string|max:191',
+
+
+        ];
+    }
+
+    /**
+     * Define validation rules to update method for resource update
+     *
+     * @return array
+     */
+    public function updateRules(): array
+    {
+        return [
+            'vessel_name' => 'required|string|max:191',
+            'voyage_number' => 'required|string|max:191',
+            // 'creation_time' => 'required|string|max:191',
+            // 'vessel_created_by' => 'required|string|max:191',
+            // 'stored_vessel_name' => 'required|string|max:191',
+            // 'vsl_namecode' => 'required|string|max:191',
+            // 'vessel_created_by' => 'required|string|max:191',
+            // 'status_field' => 'required|string|max:191',
+            // 'namevalidation' => 'required|string|max:191',
+        ];
+    }
+}
