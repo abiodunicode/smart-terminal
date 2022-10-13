@@ -14,6 +14,12 @@ import VCalendar from 'v-calendar';
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;
 
+
+  import Multiselect from 'vue-multiselect'
+
+  // register globally
+  Vue.component('multiselect', Multiselect)
+
 import '@desislavsd/vue-select/dist/vue-select.css'
 import VueSelect from '@desislavsd/vue-select'
 

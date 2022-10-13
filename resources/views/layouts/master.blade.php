@@ -8,7 +8,7 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name', 'BHL Courier') }}</title>
+  <title>{{ config('app.name', 'Smart Terminal') }}</title>
 
 
   <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
@@ -48,7 +48,7 @@
       <!-- Brand Logo -->
       <router-link to="/dashboard" class="brand-link">
         <img src="{{ asset('/images/logo2.png') }}" alt="The Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">{{ config('', 'BHL') }}</span>
+        <span class="brand-text font-weight-light">{{ config('', 'ST') }}</span>
       </router-link>
 
       <!-- Sidebar -->
@@ -115,7 +115,7 @@
       </div>
       {{-- Default to the left --}}
       <strong>Copyright &copy; <?php echo date("Y"); ?>
-        <a href=""> BHL </a>.</strong> All rights reserved.
+        <a href=""> SMART TERMINAL </a>.</strong> All rights reserved.
     </footer>
   </div>
   {{-- ./wrapper --}}

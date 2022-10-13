@@ -91,7 +91,43 @@ class AddVesselController extends BaseController
         // return Schema::getColumnListing($table);
 
         $vesselsnames = DB::table('addvessels')
-            ->select('id', 'vessel_name')
+            ->select('vessel_name')
+            ->get();
+
+        // foreach ($vesselsnames as $vesselsnames) {
+        //     //  dd($vesselsnames);
+        // }
+        return $this->sendResponse($vesselsnames, ' Vessel Names List');
+    }
+
+    public function countries()
+    {
+        // $vesselsnames = DB::table('addvessels')->pluck('vessel_name');
+        // $vesselsnames = AddVessel::latest()->paginate(10);
+        // return Schema::getColumnListing($table);
+
+        $vesselsnames = DB::table('countries')
+            ->select('name')
+            ->get();
+
+        // foreach ($vesselsnames as $vesselsnames) {
+        //     //  dd($vesselsnames);
+        // }
+        return $this->sendResponse($vesselsnames, ' Vessel Names List');
+    }
+
+    public function portcode()
+    {
+        // Flight::chunk(200, function ($flights) {
+        //     foreach ($flights as $flight) {
+        //         //
+        //     }
+        // });
+
+
+
+        $vesselsnames = DB::table('portcode')
+            ->select('id')
             ->get();
 
         // foreach ($vesselsnames as $vesselsnames) {

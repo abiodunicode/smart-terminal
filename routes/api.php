@@ -68,6 +68,8 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
 
     Route::post('createvessel', 'AddVesselController@store');
     Route::get('vesselnames', 'AddVesselController@existingvesselname');
+    Route::get('countries', 'AddVesselController@countries');
+    Route::get('portcodes', 'AddVesselController@portcode');
     // Route::put("tracking/{id}", 'TrackingController@update');
     // Route::delete('tracking/{id}', 'TrackingController@destroy');
 

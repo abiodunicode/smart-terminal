@@ -3,6 +3,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Portcode;
+
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;

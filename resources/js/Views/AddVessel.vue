@@ -27,8 +27,8 @@
                   spelling as shown in Lloyd list or in the IMO chart. eg: SILVER RAY 091W
                 </p>
 
-                <input type="checkbox" id="checkbox" v-model="checked" />
-                <label for="checkbox">{{ checked }}</label>
+                <!-- <input type="checkbox" id="checkbox" v-model="checked" />
+                <label for="checkbox">{{ checked }}</label> -->
 
                 <form @submit.prevent class="form-horizontal">
                   <div class="card-body">
@@ -61,7 +61,7 @@
                         <has-error :form="form" field="vessel_name"></has-error>
                         <input type="checkbox" id="checkbox" v-model="checked" />
                         <label for="checkbox">{{
-                          checked == false ? "Select Ships" : "Other"
+                          checked == false ? "Other" : "Other"
                         }}</label>
                       </div>
                     </div>
@@ -208,11 +208,12 @@ export default {
 
   computed: {
     options() {
-      return Object.keys(this.vesselnames).map((k) => {
-        let o = this.vesselnames[k];
+      // return Object.keys(this.vesselnames).map((k) => {
+      //   let o = this.vesselnames[k];
 
-        return `${o.vessel_name}`;
-      });
+      //   return `${o.vessel_name}`;
+      // });
+      return this.vesselnames.map( e => e.vessel_name );
     },
 
     options_id() {
